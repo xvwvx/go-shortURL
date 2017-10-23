@@ -15,10 +15,10 @@ func main() {
 		panic(err)
 	}
 
-	if runtime.NumCPU() < core.Conf.Procs {
+	if runtime.NumCPU() < core.Conf.MaxProc {
 		runtime.GOMAXPROCS(runtime.NumCPU())
 	} else {
-		runtime.GOMAXPROCS(core.Conf.Procs)
+		runtime.GOMAXPROCS(core.Conf.MaxProc)
 	}
 
 	core.LinkDB()

@@ -18,7 +18,7 @@ var (
 type Config struct {
 	RootURL string `goconf:"base:root_url"`
 	Token   string `goconf:"base:token"`
-	Procs   int    `goconf:"base:procs"`
+	MaxProc int    `goconf:"base:maxproc"`
 
 	DBHost      string `goconf:"base:db.host"`
 	DBUsername  string `goconf:"base:db.username"`
