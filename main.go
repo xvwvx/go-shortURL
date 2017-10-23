@@ -37,7 +37,7 @@ func main() {
 		waitGroup.Done()
 	}()
 
-	log.Println("hortURL 启动完成")
+	log.Println("ShortURL 启动完成")
 	waitGroup.Wait()
 	log.Println("ShortURL 程序退出")
 
