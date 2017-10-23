@@ -23,7 +23,7 @@ var (
 func LinkDB() {
 	var err error
 
-	dataSourceName := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8`, Conf.DBUsername, Conf.DBPassword, Conf.DBHost,
+	dataSourceName := fmt.Sprintf(`%s:%s@tcp(%s)/%s?charset=utf8mb4`, Conf.DBUsername, Conf.DBPassword, Conf.DBHost,
 		Conf.DBDatabase)
 	db, err = sql.Open("mysql", dataSourceName)
 	if err != nil {
@@ -33,7 +33,12 @@ func LinkDB() {
 	db.SetMaxOpenConns(20)
 	db.SetConnMaxLifetime(1 * time.Hour)
 
-	atomic.StoreUint64(&globalLastId, lastId())
+	//保留 100000 以内的id
+	lastId := lastId()
+	if lastId < 100000 {
+		lastId = 100000
+	}
+	atomic.StoreUint64(&globalLastId, lastId)
 }
 
 //获取最后一个id

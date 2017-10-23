@@ -9,6 +9,7 @@ CREATE TABLE `short_url` (
   `id` int(11) NOT NULL COMMENT 'id',
   `original` text NOT NULL COMMENT '原始网址',
   `short` text NOT NULL COMMENT '短链接网址后缀',
+  `createtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
