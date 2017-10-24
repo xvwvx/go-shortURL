@@ -45,7 +45,7 @@ func LinkDB() {
 func lastId() (value uint64) {
 	rows, err := db.Query("SELECT `id` FROM `short_url` ORDER BY	`id` DESC LIMIT 1")
 	if err != nil {
-		return 0
+		panic(err)
 	}
 	defer rows.Close()
 
@@ -58,7 +58,7 @@ func lastId() (value uint64) {
 
 //插入数据
 func insert(originalURL string) (string, error) {
-	stmt, err := db.Prepare("INSERT INTO `short_url`(`id`, `original`, `short`) VALUES(?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO `short_url`(`id`, `url_long`, `url_short`) VALUES(?, ?, ?)")
 	if err != nil {
 		return "", err
 	}
@@ -90,7 +90,7 @@ func find(suffix string) (result string, err error) {
 		return "", notFoundErr
 	}
 
-	rows, err := db.Query("SELECT `original` FROM short_url WHERE `id`=?", id)
+	rows, err := db.Query("SELECT `url_long` FROM short_url WHERE `id`=?", id)
 	if err != nil {
 		return "", err
 	}
