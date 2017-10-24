@@ -100,6 +100,10 @@ func find(suffix string) (result string, err error) {
 		rows.Scan(&result)
 	}
 
+	if result == "" {
+		return "", notFoundErr
+	}
+
 	return
 
 }
