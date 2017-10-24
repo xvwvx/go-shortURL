@@ -6,9 +6,16 @@ import (
 	"strings"
 )
 
-func GetOriginalURL(w http.ResponseWriter, r *http.Request) {
+func Root(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() //解析参数, 默认是不会解析的
+	if len(r.Form) > 0 {
+		genShortURL(w, r)
+	} else {
+		getOriginalURL(w, r)
+	}
+}
 
+func getOriginalURL(w http.ResponseWriter, r *http.Request) {
 	suffix := strings.TrimPrefix(r.URL.Path, `/`)
 	if len(suffix) == 0 {
 		w.WriteHeader(404)
@@ -24,9 +31,7 @@ func GetOriginalURL(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GenShortURL(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm() //解析参数, 默认是不会解析的
-
+func genShortURL(w http.ResponseWriter, r *http.Request) {
 	url := r.Form["url"]
 	token := r.Form["token"]
 	if len(url) == 0 || len(token) == 0 || token[0] != Conf.Token {
@@ -34,12 +39,13 @@ func GenShortURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	suffix, err := insert(url[0])
+	urlLong := url[0]
+	suffix, err := insert(urlLong)
 	if err != nil {
 		fmt.Fprintf(w, `{"success":0}`)
 		return
 	}
 
-	shortURL := fmt.Sprintf("%s%s", Conf.RootURL, suffix)
-	fmt.Fprintf(w, `{"success":1,"url":"%s"}`, shortURL) //输出到客户端的信息
+	urlShort := fmt.Sprintf("%s%s", Conf.RootURL, suffix)
+	fmt.Fprintf(w, `{"success":1,"result":{"url_short":"%s","url_long":"%s"}}`, urlShort, urlLong) //输出到客户端的信息
 }

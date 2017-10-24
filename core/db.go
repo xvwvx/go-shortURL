@@ -33,10 +33,10 @@ func LinkDB() {
 	db.SetMaxOpenConns(20)
 	db.SetConnMaxLifetime(1 * time.Hour)
 
-	//保留 100000 以内的id
+	//保留 1000000 以内的id
 	lastId := lastId()
-	if lastId < 100000 {
-		lastId = 100000
+	if lastId < 1000000 {
+		lastId = 1000000
 	}
 	atomic.StoreUint64(&globalLastId, lastId)
 }

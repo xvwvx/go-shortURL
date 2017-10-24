@@ -23,8 +23,7 @@ func main() {
 
 	core.LinkDB()
 
-	http.HandleFunc("/", core.GetOriginalURL)
-	http.HandleFunc("/_genShortURL", core.GenShortURL)
+	http.HandleFunc("/", core.Root)
 
 	waitGroup := sync.WaitGroup{}
 
