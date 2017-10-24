@@ -16,9 +16,10 @@ var (
 )
 
 type Config struct {
-	RootURL string `goconf:"base:root_url"`
-	Token   string `goconf:"base:token"`
-	MaxProc int    `goconf:"base:maxproc"`
+	RootURL  string `goconf:"base:root_url"`
+	Token    string `goconf:"base:token"`
+	HTTPAddr string `goconf:"base:http_addr"`
+	MaxProc  int    `goconf:"base:maxproc"`
 
 	DBHost      string `goconf:"base:db.host"`
 	DBUsername  string `goconf:"base:db.username"`
@@ -29,6 +30,9 @@ type Config struct {
 
 func LoadConfg() error {
 	Conf = &Config{
+		RootURL:  "127.0.0.1:12345",
+		HTTPAddr: ":12345",
+		MaxProc:  3,
 
 		DBHost:      "127.0.0.1:3306",
 		DBUsername:  "root",

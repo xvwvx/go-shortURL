@@ -30,7 +30,7 @@ func main() {
 
 	waitGroup.Add(1)
 	go func() {
-		err := http.ListenAndServe(":1234", nil)
+		err := http.ListenAndServe(core.Conf.HTTPAddr, nil)
 		if err != nil {
 			log.Fatal("ListenAndServe: ", err)
 		}
