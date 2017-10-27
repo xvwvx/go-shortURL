@@ -33,10 +33,10 @@ func LinkDB() {
 	db.SetMaxOpenConns(20)
 	db.SetConnMaxLifetime(1 * time.Hour)
 
-	//保留 1000000 以内的id
+	//保留 10000 及以内的id
 	lastId := lastId()
-	if lastId < 1000000 {
-		lastId = 1000000
+	if lastId < 10000 {
+		lastId = 10000
 	}
 	atomic.StoreUint64(&globalLastId, lastId)
 }
@@ -57,7 +57,14 @@ func lastId() (value uint64) {
 }
 
 //插入数据
-func insert(originalURL string) (string, error) {
+func insert(urlLong string) (suffix string, err error) {
+	suffix, err = findWithURLLong(urlLong)
+	if err != nil {
+		return "", err
+	} else if suffix != "" {
+		return suffix, nil
+	}
+
 	stmt, err := db.Prepare("INSERT INTO `short_url`(`id`, `url_long`, `url_short`) VALUES(?, ?, ?)")
 	if err != nil {
 		return "", err
@@ -65,9 +72,9 @@ func insert(originalURL string) (string, error) {
 	defer stmt.Close()
 
 	id := atomic.AddUint64(&globalLastId, 1)
-	suffix := base62.Encode(id)
+	suffix = base62.Encode(id)
 
-	res, err := stmt.Exec(id, originalURL, suffix)
+	res, err := stmt.Exec(id, urlLong, suffix)
 	if err != nil {
 		return "", err
 	}
@@ -82,6 +89,21 @@ func insert(originalURL string) (string, error) {
 	}
 
 	return suffix, nil
+}
+
+//查询已存在的值
+func findWithURLLong(urlLong string) (urlShort string, err error) {
+	rows, err := db.Query("SELECT `url_short` FROM short_url WHERE `url_long`=?  LIMIT 1", urlLong)
+	if err != nil {
+		return "", err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&urlShort)
+	}
+
+	return
 }
 
 func find(suffix string) (result string, err error) {
