@@ -15,16 +15,22 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func NotFound(w http.ResponseWriter, r *http.Request) {
+	if Conf.ErrorPage == "" {
+		http.NotFound(w, r)
+	} else {
+		http.Redirect(w, r, Conf.ErrorPage, http.StatusFound)
+	}
+}
+
 func getOriginalURL(w http.ResponseWriter, r *http.Request) {
 	suffix := strings.TrimPrefix(r.URL.Path, `/`)
 	if len(suffix) == 0 {
-		w.WriteHeader(404)
-		w.Write([]byte("<h1>404</h1>"))
+		NotFound(w, r)
 	} else {
 		originalURL, err := find(suffix)
 		if err != nil {
-			w.WriteHeader(404)
-			w.Write([]byte("<h1>404</h1>"))
+			NotFound(w, r)
 		} else {
 			http.Redirect(w, r, originalURL, http.StatusMovedPermanently)
 		}

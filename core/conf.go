@@ -16,10 +16,11 @@ var (
 )
 
 type Config struct {
-	RootURL  string `goconf:"base:root_url"`
-	Token    string `goconf:"base:token"`
-	HTTPAddr string `goconf:"base:http_addr"`
-	MaxProc  int    `goconf:"base:maxproc"`
+	RootURL   string `goconf:"base:root_url"`
+	Token     string `goconf:"base:token"`
+	HTTPAddr  string `goconf:"base:http_addr"`
+	MaxProc   int    `goconf:"base:maxproc"`
+	ErrorPage string `goconf:"base:error_page"`
 
 	DBHost      string `goconf:"base:db.host"`
 	DBUsername  string `goconf:"base:db.username"`
