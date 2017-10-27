@@ -16,6 +16,11 @@ var (
 
 func init() {
 	encodeStdChar := []byte(encodeStd)
+
+	for i, _ := range decodeStd {
+		decodeStd[i] = math.MaxUint64
+	}
+
 	for i, c := range encodeStdChar {
 		decodeStd[int(c)] = uint64(i)
 	}
@@ -45,7 +50,7 @@ func Decode(token string) (number uint64, err error) {
 
 	for i, c := range chars {
 		decodeValue := decodeStd[c]
-		if encodeStd[decodeValue] != c {
+		if decodeValue == math.MaxUint64 {
 			return 0, decodeError
 		}
 		number += decodeValue * uint64(math.Pow(length, float64(i)))
