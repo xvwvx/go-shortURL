@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/Terry-Mao/goconf"
+	"strings"
 )
 
 func init() {
@@ -48,6 +49,10 @@ func LoadConfg() error {
 
 	if err := gconf.Unmarshal(Conf); err != nil {
 		return err
+	}
+
+	if !strings.HasSuffix(Conf.RootURL, "/") {
+		Conf.RootURL = Conf.RootURL + "/"
 	}
 
 	return nil
