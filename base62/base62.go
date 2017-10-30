@@ -41,11 +41,13 @@ func Encode(number uint64) string {
 		number = result
 	}
 
+	chars = reverse(chars)
+
 	return string(chars)
 }
 
 func Decode(token string) (number uint64, err error) {
-	chars := []byte(token)
+	chars := reverse([]byte(token))
 	length := float64(len(encodeStd))
 
 	for i, c := range chars {
@@ -56,4 +58,11 @@ func Decode(token string) (number uint64, err error) {
 		number += decodeValue * uint64(math.Pow(length, float64(i)))
 	}
 	return number, nil
+}
+
+func reverse(array []byte) []byte {
+	for i, j := 0, len(array)-1; i < j; i, j = i+1, j-1 {
+		array[i], array[j] = array[j], array[i]
+	}
+	return array
 }
