@@ -36,9 +36,8 @@ func Encode(number uint64) string {
 	length := uint64(len(encodeStd))
 	for number > 0 {
 		remainder := number % length
-		result := number / length
 		chars = append(chars, encodeStd[remainder])
-		number = result
+		number = number / length
 	}
 
 	chars = reverse(chars)
