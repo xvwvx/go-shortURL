@@ -93,7 +93,7 @@ func insert(urlLong string) (suffix string, err error) {
 
 //查询已存在的值
 func findWithURLLong(urlLong string) (urlShort string, err error) {
-	rows, err := db.Query("SELECT `url_short` FROM short_url WHERE `url_long`=?  LIMIT 1", urlLong)
+	rows, err := db.Query("SELECT `url_short` FROM short_url WHERE `url_long`=? LIMIT 1", urlLong)
 	if err != nil {
 		return "", err
 	}
@@ -112,7 +112,7 @@ func find(suffix string) (result string, err error) {
 		return "", notFoundErr
 	}
 
-	rows, err := db.Query("SELECT `url_long` FROM short_url WHERE `id`=?", id)
+	rows, err := db.Query("SELECT `url_long` FROM short_url WHERE `id`=? LIMIT 1", id)
 	if err != nil {
 		return "", err
 	}
