@@ -40,6 +40,8 @@ func getOriginalURL(w http.ResponseWriter, r *http.Request) {
 func genShortURL(w http.ResponseWriter, r *http.Request) {
 	url := r.Form["url"]
 	token := r.Form["token"]
+
+	w.Header().Set("Content-type", "application/json")
 	if len(url) == 0 || len(token) == 0 || token[0] != Conf.Token {
 		fmt.Fprintf(w, `{"success":0}`)
 		return

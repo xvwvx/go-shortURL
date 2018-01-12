@@ -17,7 +17,7 @@ var (
 func init() {
 	encodeStdChar := []byte(encodeStd)
 
-	for i, _ := range decodeStd {
+	for i := range decodeStd {
 		decodeStd[i] = math.MaxUint64
 	}
 
