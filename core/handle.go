@@ -11,7 +11,7 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		// 捕获panic异常
 		if err := recover(); err != nil{
-			log.Fatal(err)
+			log.Println(err)
 		}
 	}()
 	r.ParseForm() //解析参数, 默认是不会解析的

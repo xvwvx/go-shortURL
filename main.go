@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"shortURL/core"
+	"os"
 )
 
 func main() {
@@ -20,6 +21,13 @@ func main() {
 	} else {
 		runtime.GOMAXPROCS(core.Conf.MaxProc)
 	}
+
+	writer, err := os.OpenFile("./shortURL.log", os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+		panic(err)
+	}
+	defer writer.Close()
+	log.SetOutput(writer)
 
 	core.LinkDB()
 
