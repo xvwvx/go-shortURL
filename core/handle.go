@@ -15,7 +15,7 @@ func Root(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 	r.ParseForm() //解析参数, 默认是不会解析的
-	if len(r.Form) > 0 {
+	if len(r.Form) > 0 && r.Form["url"] != nil && r.Form["token"] != nil {
 		genShortURL(w, r)
 	} else {
 		getOriginalURL(w, r)
