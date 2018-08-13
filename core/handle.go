@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 	"log"
+	"html/template"
 )
 
 func Root(w http.ResponseWriter, r *http.Request) {
@@ -30,6 +31,22 @@ func NotFound(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
+var t = func() *template.Template {
+	var tmpl = `
+<html>
+  <body>
+    <script type="text/javascript">
+      window.location.href="{{ . }}"
+      </script>
+  </body>
+</html>
+`
+	var t = template.New("layout.html")
+	t, _ = t.Parse(tmpl)
+	return t
+}()
+
 func getOriginalURL(w http.ResponseWriter, r *http.Request) {
 	suffix := strings.TrimPrefix(r.URL.Path, `/`)
 	if len(suffix) == 0 {
@@ -38,8 +55,10 @@ func getOriginalURL(w http.ResponseWriter, r *http.Request) {
 		originalURL, err := find(suffix)
 		if err != nil {
 			NotFound(w, r)
-		} else {
+		} else if !strings.Contains(originalURL, "#") {
 			http.Redirect(w, r, originalURL, http.StatusMovedPermanently)
+		}else {
+			t.Execute(w, originalURL)
 		}
 	}
 }
